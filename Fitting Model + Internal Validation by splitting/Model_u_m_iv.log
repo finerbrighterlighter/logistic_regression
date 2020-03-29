@@ -1,0 +1,1637 @@
+-----------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Model_u_m_iv.log
+  log type:  text
+ opened on:   1 Feb 2020, 13:54:18
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. ** data preprocessing
+. 
+. use "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta"
+
+. 
+. sum age
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |     10,000     59.5009    19.12893          0        106
+
+. sum hgb2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        hgb2 |     10,000    128.8984    19.03016   53.90819        223
+
+. sum lym2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        lym2 |     10,000    2.403219    7.955171          0      588.3
+
+. sum glob2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       glob2 |     10,000     37.9204    7.231438         13        114
+
+. sum cai2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        cai2 |     10,000    1.211957    .0838514        .52       2.29
+
+. sum agapt2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      agapt2 |     10,000    10.14441    2.700755          0         28
+
+. sum gfr2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gfr2 |      9,990    76.74878    39.66912   3.247472   1254.995
+
+. 
+. misstable sum
+                                                               Obs<.
+                                                +------------------------------
+               |                                | Unique
+      Variable |     Obs=.     Obs>.     Obs<.  | values        Min         Max
+  -------------+--------------------------------+------------------------------
+          gfr2 |        10               9,990  |   >500   3.247472    1254.995
+       _Isex_2 |        10               9,990  |      2          0           1
+  -----------------------------------------------------------------------------
+
+. 
+. * considering age=0 is impossible
+. replace age=. if age==0
+(2 real changes made, 2 to missing)
+
+. sum age
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |      9,998     59.5128    19.11231          1        106
+
+. 
+. encode sex, gen (gender)
+
+. 
+. * grouping data according to Aj
+. generate agegp=1 if age<60
+(5,362 missing values generated)
+
+. replace agegp=2 if age>=60 & age!=.
+(5,360 real changes made)
+
+. tab agegp
+
+      agegp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,638       46.39       46.39
+          2 |      5,360       53.61      100.00
+------------+-----------------------------------
+      Total |      9,998      100.00
+
+. 
+. generate hgbgp=1 if hgb2<100
+(9,178 missing values generated)
+
+. replace hgbgp=2 if hgb2>=100 & hgb2!=.
+(9,178 real changes made)
+
+. tab hgbgp
+
+      hgbgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        822        8.22        8.22
+          2 |      9,178       91.78      100.00
+------------+-----------------------------------
+      Total |     10,000      100.00
+
+. 
+. * considering lymphocyte count=0 is impossible
+. replace lym2=. if lym2==0
+(4 real changes made, 4 to missing)
+
+. sum lym2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        lym2 |      9,996    2.404181    7.956617         .1      588.3
+
+. 
+. generate lymgp=1 if lym2<1.9
+(4,574 missing values generated)
+
+. replace lymgp=2 if lym2>=1.9 & lym2!=.
+(4,570 real changes made)
+
+. tab lymgp
+
+      lymgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      5,426       54.28       54.28
+          2 |      4,570       45.72      100.00
+------------+-----------------------------------
+      Total |      9,996      100.00
+
+. 
+. * A normal range for total globulins is 23 to 35 g/L
+. * I will consider 70 g/L as the maximum limit for globulin
+. 
+. replace glob2=. if glob2>70
+(44 real changes made, 44 to missing)
+
+. sum glob2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       glob2 |      9,956    37.72268    6.576134         13         70
+
+. 
+. generate glogp=1 if glob2<38
+(4,582 missing values generated)
+
+. replace glogp=2 if glob2>=38 & glob2!=.
+(4,538 real changes made)
+
+. tab glogp
+
+      glogp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      5,418       54.42       54.42
+          2 |      4,538       45.58      100.00
+------------+-----------------------------------
+      Total |      9,956      100.00
+
+. 
+. generate cagp=1 if cai2<1.35
+(440 missing values generated)
+
+. replace cagp=2 if cai2>=1.35 & cai2!=.
+(440 real changes made)
+
+. tab cagp
+
+       cagp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      9,560       95.60       95.60
+          2 |        440        4.40      100.00
+------------+-----------------------------------
+      Total |     10,000      100.00
+
+. 
+. generate angp=1 if agapt2<10
+(6,198 missing values generated)
+
+. replace angp=2 if agapt2>=10 & agapt2!=.
+(6,198 real changes made)
+
+. tab angp
+
+       angp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      3,802       38.02       38.02
+          2 |      6,198       61.98      100.00
+------------+-----------------------------------
+      Total |     10,000      100.00
+
+. 
+. * A normal range for eGFR is 80-120 (125ml/min/1.73m2)
+. * I will consider 250 ml/min/1.73m2 as the maximum limit for gfr2
+. 
+. replace gfr2=. if gfr2>250
+(33 real changes made, 33 to missing)
+
+. sum gfr2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gfr2 |      9,957    75.47438    30.30081   3.247472   249.8909
+
+. 
+. 
+. generate gfrgp=1 if gfr2<60
+(7,049 missing values generated)
+
+. replace gfrgp=2 if gfr2>=60 & gfr2!=.
+(7,006 real changes made)
+
+. tab gfrgp
+
+      gfrgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      2,951       29.64       29.64
+          2 |      7,006       70.36      100.00
+------------+-----------------------------------
+      Total |      9,957      100.00
+
+. 
+. mdesc gender agegp hgbgp lymgp glogp cagp angp gfrgp
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+         gender |          10         10,000           0.10
+          agegp |           2         10,000           0.02
+          hgbgp |           0         10,000           0.00
+          lymgp |           4         10,000           0.04
+          glogp |          44         10,000           0.44
+           cagp |           0         10,000           0.00
+           angp |           0         10,000           0.00
+          gfrgp |          43         10,000           0.43
+----------------+-----------------------------------------------
+
+. * misstable sum gender agegp hgbgp lymgp glogp cagp angp gfrgp
+. 
+. label define age 1 "younger than 60" 2 "older than 60"
+
+. label value agegp age
+
+. 
+. label define hgb 1 "less than 100 g/L" 2 "more than 100 g/L" 
+
+. label value hgbgp hgb
+
+. 
+. label define lymph 1 "less than 1.9 x10^9/L" 2 "more than 1.9 x10^9/L"
+
+. label value lymgp lymph
+
+. 
+. label define globulin 1 "less than 38 g/L" 2 "more than 38 g/L"
+
+. label value glogp globulin
+
+. 
+. label define ical 1 "less than 1.35 mmol/L" 2 "more than 1.35 mmol/L"
+
+. label value cagp ical
+
+. 
+. label define angap 1 "less than 10 mmol/L" 2 "more than 10 mmol/L"
+
+. label value angp angap
+
+. 
+. label define gfrgp 1 "less than 60 mL/min/1.73 m2" 2 "more than 60 mL/min/1.73 m2"
+
+. label value gfrgp gfrgp
+
+. 
+end of do-file
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. ** distribution and model fitting
+. 
+. *** chisquare / distribution
+. tab agegp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                |        SPE/UPE
+          agegp |         0          1 |     Total
+----------------+----------------------+----------
+younger than 60 |     4,482        156 |     4,638 
+                |   4,262.7      375.3 |   4,638.0 
+                |     48.78      19.28 |     46.39 
+----------------+----------------------+----------
+  older than 60 |     4,707        653 |     5,360 
+                |   4,926.3      433.7 |   5,360.0 
+                |     51.22      80.72 |     53.61 
+----------------+----------------------+----------
+          Total |     9,189        809 |     9,998 
+                |   9,189.0      809.0 |   9,998.0 
+                |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) = 260.0530   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. tab gender epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+           |        SPE/UPE
+    gender |         0          1 |     Total
+-----------+----------------------+----------
+         F |     5,661        397 |     6,058 
+           |   5,569.2      488.8 |   6,058.0 
+           |     61.64      49.26 |     60.64 
+-----------+----------------------+----------
+         M |     3,523        409 |     3,932 
+           |   3,614.8      317.2 |   3,932.0 
+           |     38.36      50.74 |     39.36 
+-----------+----------------------+----------
+     Total |     9,184        806 |     9,990 
+           |   9,184.0      806.0 |   9,990.0 
+           |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) =  47.6132   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. tab hgbgp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                  |        SPE/UPE
+            hgbgp |         0          1 |     Total
+------------------+----------------------+----------
+less than 100 g/L |       721        101 |       822 
+                  |     755.5       66.5 |     822.0 
+                  |      7.84      12.48 |      8.22 
+------------------+----------------------+----------
+more than 100 g/L |     8,470        708 |     9,178 
+                  |   8,435.5      742.5 |   9,178.0 
+                  |     92.16      87.52 |     91.78 
+------------------+----------------------+----------
+            Total |     9,191        809 |    10,000 
+                  |   9,191.0      809.0 |  10,000.0 
+                  |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) =  21.2184   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. tab lymgp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                      |        SPE/UPE
+                lymgp |         0          1 |     Total
+----------------------+----------------------+----------
+less than 1.9 x10^9/L |     4,826        600 |     5,426 
+                      |   4,986.9      439.1 |   5,426.0 
+                      |     52.53      74.17 |     54.28 
+----------------------+----------------------+----------
+more than 1.9 x10^9/L |     4,361        209 |     4,570 
+                      |   4,200.1      369.9 |   4,570.0 
+                      |     47.47      25.83 |     45.72 
+----------------------+----------------------+----------
+                Total |     9,187        809 |     9,996 
+                      |   9,187.0      809.0 |   9,996.0 
+                      |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) = 140.2367   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. tab glogp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                 |        SPE/UPE
+           glogp |         0          1 |     Total
+-----------------+----------------------+----------
+less than 38 g/L |     5,220        198 |     5,418 
+                 |   4,991.4      426.6 |   5,418.0 
+                 |     56.91      25.26 |     54.42 
+-----------------+----------------------+----------
+more than 38 g/L |     3,952        586 |     4,538 
+                 |   4,180.6      357.4 |   4,538.0 
+                 |     43.09      74.74 |     45.58 
+-----------------+----------------------+----------
+           Total |     9,172        784 |     9,956 
+                 |   9,172.0      784.0 |   9,956.0 
+                 |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) = 291.8150   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. tab cagp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                      |        SPE/UPE
+                 cagp |         0          1 |     Total
+----------------------+----------------------+----------
+less than 1.35 mmol/L |     8,791        769 |     9,560 
+                      |   8,786.6      773.4 |   9,560.0 
+                      |     95.65      95.06 |     95.60 
+----------------------+----------------------+----------
+more than 1.35 mmol/L |       400         40 |       440 
+                      |     404.4       35.6 |     440.0 
+                      |      4.35       4.94 |      4.40 
+----------------------+----------------------+----------
+                Total |     9,191        809 |    10,000 
+                      |   9,191.0      809.0 |  10,000.0 
+                      |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) =   0.6201   Pr = 0.431
+           Fisher's exact =                 0.421
+   1-sided Fisher's exact =                 0.239
+
+. tab angp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                    |        SPE/UPE
+               angp |         0          1 |     Total
+--------------------+----------------------+----------
+less than 10 mmol/L |     3,476        326 |     3,802 
+                    |   3,494.4      307.6 |   3,802.0 
+                    |     37.82      40.30 |     38.02 
+--------------------+----------------------+----------
+more than 10 mmol/L |     5,715        483 |     6,198 
+                    |   5,696.6      501.4 |   6,198.0 
+                    |     62.18      59.70 |     61.98 
+--------------------+----------------------+----------
+              Total |     9,191        809 |    10,000 
+                    |   9,191.0      809.0 |  10,000.0 
+                    |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) =   1.9361   Pr = 0.164
+           Fisher's exact =                 0.174
+   1-sided Fisher's exact =                 0.088
+
+. tab gfrgp epg, col exp chi2 exact
+
++--------------------+
+| Key                |
+|--------------------|
+|     frequency      |
+| expected frequency |
+| column percentage  |
++--------------------+
+
+                      |        SPE/UPE
+                gfrgp |         0          1 |     Total
+----------------------+----------------------+----------
+less than 60 mL/min/1 |     2,505        446 |     2,951 
+                      |   2,712.1      238.9 |   2,951.0 
+                      |     27.37      55.33 |     29.64 
+----------------------+----------------------+----------
+more than 60 mL/min/1 |     6,646        360 |     7,006 
+                      |   6,438.9      567.1 |   7,006.0 
+                      |     72.63      44.67 |     70.36 
+----------------------+----------------------+----------
+                Total |     9,151        806 |     9,957 
+                      |   9,151.0      806.0 |   9,957.0 
+                      |    100.00     100.00 |    100.00 
+
+          Pearson chi2(1) = 277.7129   Pr = 0.000
+           Fisher's exact =                 0.000
+   1-sided Fisher's exact =                 0.000
+
+. 
+. 
+. *** odd ratio
+. 
+. logistic epg i.agegp
+
+Logistic regression                             Number of obs     =      9,998
+                                                LR chi2(1)        =     281.53
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2668.6863                     Pseudo R2         =     0.0501
+
+--------------------------------------------------------------------------------
+           epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+         agegp |
+older than 60  |   3.985807   .3648094    15.11   0.000     3.331258    4.768966
+         _cons |   .0348059   .0028348   -41.23   0.000     .0296706      .04083
+--------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.gender
+
+Logistic regression                             Number of obs     =      9,990
+                                                LR chi2(1)        =      46.57
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2778.1955                     Pseudo R2         =     0.0083
+
+------------------------------------------------------------------------------
+         epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gender |
+          M  |    1.65544   .1219237     6.84   0.000      1.43292    1.912514
+       _cons |    .070129    .003641   -51.18   0.000     .0633438    .0776409
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).hgbgp
+
+Logistic regression                             Number of obs     =     10,000
+                                                LR chi2(1)        =      18.79
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2800.2254                     Pseudo R2         =     0.0033
+
+------------------------------------------------------------------------------------
+               epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------+----------------------------------------------------------------
+             hgbgp |
+less than 100 g/L  |   1.675854   .1897378     4.56   0.000     1.342346    2.092224
+             _cons |   .0835891   .0032701   -63.44   0.000     .0774194    .0902506
+------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).lymgp
+
+Logistic regression                             Number of obs     =      9,996
+                                                LR chi2(1)        =     147.27
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2735.6455                     Pseudo R2         =     0.0262
+
+----------------------------------------------------------------------------------------
+                   epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------+----------------------------------------------------------------
+                 lymgp |
+less than 1.9 x10^9/L  |   2.594202   .2153011    11.49   0.000     2.204752    3.052444
+                 _cons |   .0479248   .0033935   -42.91   0.000     .0417145    .0550596
+----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.glogp
+
+Logistic regression                             Number of obs     =      9,956
+                                                LR chi2(1)        =     298.72
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2595.4797                     Pseudo R2         =     0.0544
+
+-----------------------------------------------------------------------------------
+              epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+            glogp |
+more than 38 g/L  |   3.909183    .331742    16.07   0.000     3.310176    4.616585
+            _cons |    .037931   .0027463   -45.19   0.000     .0329129    .0437143
+-----------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.cagp
+
+Logistic regression                             Number of obs     =     10,000
+                                                LR chi2(1)        =       0.60
+                                                Prob > chi2       =     0.4389
+Log likelihood = -2809.3204                     Pseudo R2         =     0.0001
+
+----------------------------------------------------------------------------------------
+                   epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------+----------------------------------------------------------------
+                  cagp |
+more than 1.35 mmol/L  |   1.143173   .1943869     0.79   0.431     .8191667    1.595334
+                 _cons |   .0874758   .0032895   -64.79   0.000     .0812603    .0941667
+----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).angp
+
+Logistic regression                             Number of obs     =     10,000
+                                                LR chi2(1)        =       1.92
+                                                Prob > chi2       =     0.1655
+Log likelihood = -2808.6584                     Pseudo R2         =     0.0003
+
+--------------------------------------------------------------------------------------
+                 epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------------+----------------------------------------------------------------
+                angp |
+less than 10 mmol/L  |   1.109703   .0830466     1.39   0.164     .9583094    1.285015
+               _cons |   .0845144   .0040047   -52.14   0.000     .0770187    .0927396
+--------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).gfrgp 
+
+Logistic regression                             Number of obs     =      9,957
+                                                LR chi2(1)        =     252.55
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2672.4293                     Pseudo R2         =     0.0451
+
+----------------------------------------------------------------------------------------------
+                         epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------------+----------------------------------------------------------------
+                       gfrgp |
+less than 60 mL/min/1.73 m2  |   3.286888   .2452996    15.94   0.000     2.839619    3.804608
+                       _cons |   .0541679   .0029312   -53.88   0.000      .048717    .0602287
+----------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. *** univariate - constrainted for forward selection
+. logistic epg i.agegp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =     274.49
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2596.2805                     Pseudo R2         =     0.0502
+
+--------------------------------------------------------------------------------
+           epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+         agegp |
+older than 60  |   4.019845   .3756408    14.89   0.000      3.34709    4.827821
+         _cons |    .033551   .0027943   -40.76   0.000     .0284979    .0395002
+--------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.gender if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =      47.54
+                                                Prob > chi2       =     0.0000
+Log likelihood =  -2709.753                     Pseudo R2         =     0.0087
+
+------------------------------------------------------------------------------
+         epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gender |
+          M  |   1.676858   .1253438     6.92   0.000     1.448337    1.941435
+       _cons |   .0680128   .0035868   -50.97   0.000     .0613338     .075419
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).hgbgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =      11.34
+                                                Prob > chi2       =     0.0008
+Log likelihood = -2727.8544                     Pseudo R2         =     0.0021
+
+------------------------------------------------------------------------------------
+               epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------+----------------------------------------------------------------
+             hgbgp |
+less than 100 g/L  |   1.523992   .1825601     3.52   0.000     1.205082    1.927298
+             _cons |   .0822552   .0032506   -63.21   0.000     .0761246    .0888795
+------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).lymgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =     138.36
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2664.3446                     Pseudo R2         =     0.0253
+
+----------------------------------------------------------------------------------------
+                   epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------+----------------------------------------------------------------
+                 lymgp |
+less than 1.9 x10^9/L  |   2.554199   .2148332    11.15   0.000     2.166009    3.011959
+                 _cons |   .0471023   .0033746   -42.65   0.000     .0409316    .0542033
+----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.glogp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =     296.27
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2585.3905                     Pseudo R2         =     0.0542
+
+-----------------------------------------------------------------------------------
+              epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+            glogp |
+more than 38 g/L  |   3.899229   .3316641    16.00   0.000     3.300475    4.606605
+            _cons |   .0379942   .0027579   -45.05   0.000     .0329557    .0438031
+-----------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg i.cagp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =       0.52
+                                                Prob > chi2       =     0.4692
+Log likelihood = -2733.2627                     Pseudo R2         =     0.0001
+
+----------------------------------------------------------------------------------------
+                   epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------+----------------------------------------------------------------
+                  cagp |
+more than 1.35 mmol/L  |    1.13662   .1979179     0.74   0.462     .8079733    1.598946
+                 _cons |   .0850698   .0032509   -64.48   0.000     .0789309    .0916863
+----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).angp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =       0.62
+                                                Prob > chi2       =     0.4297
+Log likelihood = -2733.2128                     Pseudo R2         =     0.0001
+
+--------------------------------------------------------------------------------------
+                 epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------------+----------------------------------------------------------------
+                angp |
+less than 10 mmol/L  |   1.062292   .0811292     0.79   0.429     .9146099     1.23382
+               _cons |   .0835979   .0039971   -51.91   0.000     .0761197    .0918108
+--------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. logistic epg ib(2).gfrgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(1)        =     241.85
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2612.6021                     Pseudo R2         =     0.0442
+
+----------------------------------------------------------------------------------------------
+                         epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------------+----------------------------------------------------------------
+                       gfrgp |
+less than 60 mL/min/1.73 m2  |   3.259977   .2466932    15.62   0.000     2.810615    3.781183
+                       _cons |   .0529093   .0028978   -53.66   0.000     .0475238     .058905
+----------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. ** Step 1
+. qui: logistic epg i.glogp  if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+. est store A
+
+. qui: logistic epg i.glogp i.agegp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+. est store B
+
+. lrtest A B
+
+Likelihood-ratio test                                 LR chi2(1)  =    214.72
+(Assumption: A nested in B)                           Prob > chi2 =    0.0000
+
+. qui : logistic epg i.glogp i.gender if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+. est store C
+
+. lrtest A C
+
+Likelihood-ratio test                                 LR chi2(1)  =     44.50
+(Assumption: A nested in C)                           Prob > chi2 =    0.0000
+
+. qui : logistic epg i.glogp ib(2).hgbgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp
+> !=.
+
+. est store D
+
+. lrtest A D
+
+Likelihood-ratio test                                 LR chi2(1)  =      1.86
+(Assumption: A nested in D)                           Prob > chi2 =    0.1722
+
+. qui : logistic epg i.glogp ib(2).lymgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp
+> !=.
+
+. est store E
+
+. lrtest A E
+
+Likelihood-ratio test                                 LR chi2(1)  =    123.52
+(Assumption: A nested in E)                           Prob > chi2 =    0.0000
+
+. qui : logistic epg i.glogp ib(2).gfrgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & angp
+> !=.
+
+. est store F
+
+. lrtest A F
+
+Likelihood-ratio test                                 LR chi2(1)  =    158.73
+(Assumption: A nested in F)                           Prob > chi2 =    0.0000
+
+. 
+. ** Step 2
+. qui: logistic epg i.glogp i.agegp i.gender if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=. & 
+> angp!=.
+
+. est store C2
+
+. lrtest B C2
+
+Likelihood-ratio test                                 LR chi2(1)  =     26.04
+(Assumption: B nested in C2)                          Prob > chi2 =    0.0000
+
+. qui: logistic epg i.glogp i.agegp ib(2).hgbgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=.
+>  & angp!=.
+
+. est store D2
+
+. lrtest B D2
+
+Likelihood-ratio test                                 LR chi2(1)  =      0.45
+(Assumption: B nested in D2)                          Prob > chi2 =    0.5043
+
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=.
+>  & angp!=.
+
+. est store E2
+
+. lrtest B E2
+
+Likelihood-ratio test                                 LR chi2(1)  =     87.07
+(Assumption: B nested in E2)                          Prob > chi2 =    0.0000
+
+. qui: logistic epg i.glogp i.agegp ib(2).gfrgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. & gfrgp!=.
+>  & angp!=.
+
+. est store F2
+
+. lrtest B F2
+
+Likelihood-ratio test                                 LR chi2(1)  =     60.14
+(Assumption: B nested in F2)                          Prob > chi2 =    0.0000
+
+. 
+. ** Step 3
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp i.gender if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=. &
+>  gfrgp!=. & angp!=.
+
+. est store C3
+
+. lrtest E2 C3
+
+Likelihood-ratio test                                 LR chi2(1)  =     20.27
+(Assumption: E2 nested in C3)                         Prob > chi2 =    0.0000
+
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp ib(2).hgbgp  if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!
+> =. & gfrgp!=. & angp!=.
+
+. est store D3
+
+. lrtest E2 D3
+
+Likelihood-ratio test                                 LR chi2(1)  =      3.46
+(Assumption: E2 nested in D3)                         Prob > chi2 =    0.0630
+
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=. & cagp!=
+> . & gfrgp!=. & angp!=.
+
+. est store F3
+
+. lrtest E2 F3
+
+Likelihood-ratio test                                 LR chi2(1)  =     52.93
+(Assumption: E2 nested in F3)                         Prob > chi2 =    0.0000
+
+. 
+. ** Step 4
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp i.gender if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp!=.
+>  & cagp!=. & gfrgp!=. & angp!=.
+
+. est store C4
+
+. lrtest F3 C4
+
+Likelihood-ratio test                                 LR chi2(1)  =     24.12
+(Assumption: F3 nested in C4)                         Prob > chi2 =    0.0000
+
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp ib(2).hgbgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=. & glogp
+> !=. & cagp!=. & gfrgp!=. & angp!=.
+
+. est store D4
+
+. lrtest F3 D4
+
+Likelihood-ratio test                                 LR chi2(1)  =      9.82
+(Assumption: F3 nested in D4)                         Prob > chi2 =    0.0017
+
+. 
+. ** Step 5
+. qui: logistic epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp i.gender ib(2).hgbgp if gender!=. & agegp!=. & hgbgp!=. & lymgp!=
+> . & glogp!=. & cagp!=. & gfrgp!=. & angp!=.
+
+. est store D5
+
+. lrtest C4 D5
+
+Likelihood-ratio test                                 LR chi2(1)  =     10.28
+(Assumption: C4 nested in D5)                         Prob > chi2 =    0.0013
+
+. 
+end of do-file
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. stepwise, pe(0.05): logit epg i.agegp i.gender ib(2).hgbgp ib(2).lymgp i.glogp ib(2).gfrgp
+note: 1b.agegp dropped because of estimability
+note: 1b.gender dropped because of estimability
+note: 2b.hgbgp dropped because of estimability
+note: 2b.lymgp dropped because of estimability
+note: 1b.glogp dropped because of estimability
+note: 2b.gfrgp dropped because of estimability
+                      begin with empty model
+p = 0.0000 <  0.0500  adding  2.glogp
+p = 0.0000 <  0.0500  adding  2.agegp
+p = 0.0000 <  0.0500  adding  1.lymgp
+p = 0.0000 <  0.0500  adding  1.gfrgp
+p = 0.0000 <  0.0500  adding  2.gender
+p = 0.0019 <  0.0500  adding  1.hgbgp
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(6)        =     685.39
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2390.8307                     Pseudo R2         =     0.1254
+
+----------------------------------------------------------------------------------------------
+                         epg |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------------+----------------------------------------------------------------
+                       glogp |
+           more than 38 g/L  |   1.145258   .0876605    13.06   0.000     .9734468    1.317069
+                             |
+                       agegp |
+              older than 60  |   .9196156   .1008451     9.12   0.000     .7219628    1.117268
+                             |
+                       lymgp |
+      less than 1.9 x10^9/L  |   .7476765   .0873502     8.56   0.000     .5764732    .9188797
+                             |
+                       gfrgp |
+less than 60 mL/min/1.73 m2  |   .6669498   .0839332     7.95   0.000     .5024437    .8314559
+                             |
+                      gender |
+                          M  |   .3885813   .0782461     4.97   0.000     .2352217    .5419409
+                             |
+                       hgbgp |
+          less than 100 g/L  |  -.3929705   .1265519    -3.11   0.002    -.6410077   -.1449334
+                       _cons |  -4.645528   .1201631   -38.66   0.000    -4.881044   -4.410013
+----------------------------------------------------------------------------------------------
+end of do-file
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. logit epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp i.gender i.hgbgp
+
+Iteration 0:   log likelihood = -2733.5247  
+Iteration 1:   log likelihood = -2449.7049  
+Iteration 2:   log likelihood = -2391.2018  
+Iteration 3:   log likelihood = -2390.8309  
+Iteration 4:   log likelihood = -2390.8307  
+Iteration 5:   log likelihood = -2390.8307  
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(6)        =     685.39
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2390.8307                     Pseudo R2         =     0.1254
+
+----------------------------------------------------------------------------------------------
+                         epg |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------------+----------------------------------------------------------------
+                       glogp |
+           more than 38 g/L  |   1.145258   .0876605    13.06   0.000     .9734468    1.317069
+                             |
+                       agegp |
+              older than 60  |   .9196156   .1008451     9.12   0.000     .7219628    1.117268
+                             |
+                       lymgp |
+      less than 1.9 x10^9/L  |   .7476765   .0873502     8.56   0.000     .5764732    .9188797
+                             |
+                       gfrgp |
+less than 60 mL/min/1.73 m2  |   .6669498   .0839332     7.95   0.000     .5024437    .8314559
+                             |
+                      gender |
+                          M  |   .3885813   .0782461     4.97   0.000     .2352217    .5419409
+                             |
+                       hgbgp |
+          more than 100 g/L  |   .3929705   .1265519     3.11   0.002     .1449334    .6410077
+                       _cons |  -5.038499   .1794636   -28.08   0.000    -5.390241   -4.686757
+----------------------------------------------------------------------------------------------
+
+. logit epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp i.gender i.hgbgp,or 
+
+Iteration 0:   log likelihood = -2733.5247  
+Iteration 1:   log likelihood = -2449.7049  
+Iteration 2:   log likelihood = -2391.2018  
+Iteration 3:   log likelihood = -2390.8309  
+Iteration 4:   log likelihood = -2390.8307  
+Iteration 5:   log likelihood = -2390.8307  
+
+Logistic regression                             Number of obs     =      9,908
+                                                LR chi2(6)        =     685.39
+                                                Prob > chi2       =     0.0000
+Log likelihood = -2390.8307                     Pseudo R2         =     0.1254
+
+----------------------------------------------------------------------------------------------
+                         epg | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------------------+----------------------------------------------------------------
+                       glogp |
+           more than 38 g/L  |   3.143253    .275539    13.06   0.000     2.647053    3.732467
+                             |
+                       agegp |
+              older than 60  |   2.508326   .2529525     9.12   0.000      2.05847    3.056494
+                             |
+                       lymgp |
+      less than 1.9 x10^9/L  |   2.112087   .1844912     8.56   0.000     1.779751    2.506481
+                             |
+                       gfrgp |
+less than 60 mL/min/1.73 m2  |   1.948286   .1635259     7.95   0.000     1.652755     2.29666
+                             |
+                      gender |
+                          M  |   1.474887   .1154042     4.97   0.000     1.265189    1.719341
+                             |
+                       hgbgp |
+          more than 100 g/L  |   1.481375   .1874708     3.11   0.002     1.155963    1.898393
+                       _cons |   .0064835   .0011635   -28.08   0.000     .0045609    .0092165
+----------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+end of do-file
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. predict score_final, xb
+(92 missing values generated)
+
+. 
+. 
+. *** model performance assessment
+. qui : logit epg score_final
+
+. 
+. ** hosmer lemeshow
+. estat gof, gr(10)
+
+Logistic model for epg, goodness-of-fit test
+
+  (Table collapsed on quantiles of estimated probabilities)
+
+       number of observations =      9908
+             number of groups =        10
+      Hosmer-Lemeshow chi2(8) =         6.33
+                  Prob > chi2 =         0.6101
+
+. 
+. ** area under roc curve
+. lroc
+
+Logistic model for epg
+
+number of observations =     9908
+area under ROC curve   =   0.7680
+
+. 
+. ** model classification
+. 
+. * default cut off 0.5
+. estat class
+
+Logistic model for epg
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |         0             0  |          0
+     -     |       781          9127  |       9908
+-----------+--------------------------+-----------
+   Total   |       781          9127  |       9908
+
+Classified + if predicted Pr(D) >= .5
+True D defined as epg != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)    0.00%
+Specificity                     Pr( -|~D)  100.00%
+Positive predictive value       Pr( D| +)       .%
+Negative predictive value       Pr(~D| -)   92.12%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)    0.00%
+False - rate for true D         Pr( -| D)  100.00%
+False + rate for classified +   Pr(~D| +)       .%
+False - rate for classified -   Pr( D| -)    7.88%
+--------------------------------------------------
+Correctly classified                        92.12%
+--------------------------------------------------
+
+. 
+. * calibrating cut off
+. predict probsa, pr
+(92 missing values generated)
+
+. roctab epg probsa, detail
+
+Detailed report of sensitivity and specificity
+------------------------------------------------------------------------------
+                                           Correctly
+Cutpoint      Sensitivity   Specificity   Classified          LR+          LR-
+------------------------------------------------------------------------------
+( >= .0064.. )    100.00%         0.00%        7.88%       1.0000     
+( >= .0094.. )    100.00%         0.08%        7.95%       1.0008       0.0000
+( >= .0095.. )    100.00%         0.11%        7.98%       1.0011       0.0000
+( >= .0124.. )     98.34%         9.83%       16.80%       1.0905       0.1694
+( >= .0135.. )     98.34%         9.84%       16.81%       1.0907       0.1692
+( >= .0139.. )     98.34%         9.95%       16.92%       1.0920       0.1673
+( >= .0160.. )     97.57%        15.25%       21.74%       1.1513       0.1595
+( >= .0182.. )     97.57%        15.33%       21.81%       1.1523       0.1587
+( >= .0183.. )     97.57%        15.38%       21.86%       1.1530       0.1581
+( >= .0197.. )     97.44%        16.22%       22.62%       1.1630       0.1579
+( >= .0198.. )     97.31%        16.29%       22.68%       1.1625       0.1650
+( >= .0199.. )     96.03%        24.88%       30.49%       1.2784       0.1595
+( >= .0234.. )     96.03%        24.97%       30.57%       1.2799       0.1590
+( >= .0235.. )     96.03%        25.07%       30.66%       1.2816       0.1583
+( >= .0259.. )     94.62%        29.12%       34.29%       1.3350       0.1847
+( >= .0268.. )     94.49%        29.23%       34.38%       1.3353       0.1883
+( >= .0290.. )     94.37%        29.45%       34.57%       1.3376       0.1913
+( >= .02918 )      93.47%        33.75%       38.45%       1.4108       0.1935
+( >= .0293.. )     93.47%        33.78%       38.48%       1.4115       0.1933
+( >= .0307.. )     91.81%        39.96%       44.05%       1.5290       0.2051
+( >= .0332.. )     91.81%        40.16%       44.23%       1.5341       0.2041
+( >= .0343.. )     91.55%        40.36%       44.40%       1.5351       0.2094
+( >= .0378.. )     90.14%        43.60%       47.26%       1.5981       0.2261
+( >= .0380.. )     89.63%        43.72%       47.34%       1.5924       0.2372
+( >= .0381.. )     89.50%        44.28%       47.84%       1.6061       0.2371
+( >= .0412.. )     89.50%        44.36%       47.92%       1.6086       0.2367
+( >= .0426.. )     89.50%        44.60%       48.14%       1.6156       0.2354
+( >= .0446.. )     87.96%        47.09%       50.31%       1.6626       0.2556
+( >= .0448.. )     87.96%        47.23%       50.44%       1.6670       0.2548
+( >= .048217 )     86.43%        49.75%       52.64%       1.7201       0.2728
+( >= .0484.. )     86.30%        49.95%       52.82%       1.7243       0.2743
+( >= .0486.. )     83.35%        54.72%       56.97%       1.8407       0.3042
+( >= .0550.. )     82.97%        54.80%       57.02%       1.8358       0.3107
+( >= .0553.. )     82.71%        55.09%       57.27%       1.8418       0.3138
+( >= .05555 )      82.71%        55.14%       57.32%       1.8440       0.3135
+( >= .0596.. )     82.33%        55.83%       57.92%       1.8641       0.3165
+( >= .0599.. )     82.07%        56.03%       58.08%       1.8667       0.3199
+( >= .0627.. )     80.03%        60.48%       62.02%       2.0249       0.3303
+( >= .0647.. )     79.51%        61.09%       62.55%       2.0437       0.3353
+( >= .0698.. )     78.49%        62.13%       63.42%       2.0728       0.3462
+( >= .0701.. )     75.03%        66.32%       67.01%       2.2278       0.3765
+( >= .0703.. )     74.65%        66.41%       67.06%       2.2221       0.3818
+( >= .0773.. )     70.81%        69.12%       69.26%       2.2933       0.4223
+( >= .0798.. )     70.68%        69.28%       69.39%       2.3006       0.4232
+( >= .0859.. )     70.55%        69.54%       69.62%       2.3162       0.4235
+( >= .089833 )     68.89%        71.64%       71.43%       2.4294       0.4343
+( >= .0901.. )     67.73%        72.21%       71.86%       2.4377       0.4468
+( >= .0905.. )     64.40%        75.02%       74.18%       2.5782       0.4745
+( >= .0974.. )     63.64%        75.40%       74.48%       2.5871       0.4823
+( >= .1004.. )     62.61%        75.75%       74.72%       2.5823       0.4935
+( >= .1100.. )     59.67%        77.75%       76.32%       2.6813       0.5188
+( >= .1105 )       59.54%        77.88%       76.43%       2.6915       0.5195
+( >= .1275.. )     57.62%        78.61%       76.96%       2.6941       0.5391
+( >= .1280.. )     55.57%        80.32%       78.37%       2.8240       0.5532
+( >= .1285.. )     54.80%        80.53%       78.50%       2.8147       0.5613
+( >= .137363 )     52.11%        83.44%       80.97%       3.1478       0.5739
+( >= .1378.. )     50.70%        83.92%       81.30%       3.1524       0.5874
+( >= .1548.. )     45.20%        86.98%       83.69%       3.4724       0.6300
+( >= .1737.. )     42.00%        87.36%       83.78%       3.3216       0.6640
+( >= .1787.. )     39.82%        88.73%       84.87%       3.5320       0.6783
+( >= .1908.. )     37.26%        90.29%       86.11%       3.8383       0.6949
+( >= .2367.. )     29.32%        93.40%       88.35%       4.4455       0.7567
+( >= .2375.. )     28.30%        94.46%       89.24%       5.1041       0.7591
+( >= .3148.. )     14.98%        97.56%       91.05%       6.1314       0.8715
+( >  .3148.. )      0.00%       100.00%       92.12%                    1.0000
+------------------------------------------------------------------------------
+
+
+                      ROC                    -Asymptotic Normal--
+           Obs       Area     Std. Err.      [95% Conf. Interval]
+     ------------------------------------------------------------
+         9,908     0.7680       0.0085        0.75141     0.78466
+
+. 
+. estat class, cutoff(0.06)
+
+Logistic model for epg
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |       625          3607  |       4232
+     -     |       156          5520  |       5676
+-----------+--------------------------+-----------
+   Total   |       781          9127  |       9908
+
+Classified + if predicted Pr(D) >= .06
+True D defined as epg != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)   80.03%
+Specificity                     Pr( -|~D)   60.48%
+Positive predictive value       Pr( D| +)   14.77%
+Negative predictive value       Pr(~D| -)   97.25%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)   39.52%
+False - rate for true D         Pr( -| D)   19.97%
+False + rate for classified +   Pr(~D| +)   85.23%
+False - rate for classified -   Pr( D| -)    2.75%
+--------------------------------------------------
+Correctly classified                        62.02%
+--------------------------------------------------
+
+. 
+end of do-file
+
+. save "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta", replace
+file /Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta saved
+
+. clear
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. *** Internal Validation by Splitting Data
+. 
+. ** use validation dataset
+. use "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for validation phase.dta"
+
+. 
+. * cleaning again
+. 
+. sum age
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |      4,373    59.43906    19.12739          1        103
+
+. sum hgb2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        hgb2 |      4,374     129.085    19.14516   21.66227        205
+
+. sum lym2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        lym2 |      4,374    2.338083    4.106217          0      120.5
+
+. sum glob2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       glob2 |      4,374    37.82693    7.211546         17        122
+
+. sum cai2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        cai2 |      4,374    1.210693    .0828105        .68        2.3
+
+. sum agapt2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      agapt2 |      4,374    10.18802    2.699126          0         28
+
+. sum gfr2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gfr2 |      4,368    76.62455    35.17155   3.018966   628.3109
+
+. misstable sum
+                                                               Obs<.
+                                                +------------------------------
+               |                                | Unique
+      Variable |     Obs=.     Obs>.     Obs<.  | values        Min         Max
+  -------------+--------------------------------+------------------------------
+           age |         1               4,373  |     99          1         103
+          gfr2 |         6               4,368  |   >500   3.018966    628.3109
+       _Isex_2 |         5               4,369  |      2          0           1
+  -----------------------------------------------------------------------------
+
+. 
+. 
+. * grouping data according to Aj
+. generate agegp=1 if age<60
+(2,327 missing values generated)
+
+. replace agegp=2 if age>=60 & age!=.
+(2,326 real changes made)
+
+. tab agegp
+
+      agegp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      2,047       46.81       46.81
+          2 |      2,326       53.19      100.00
+------------+-----------------------------------
+      Total |      4,373      100.00
+
+. 
+. encode sex, gen (gender)
+
+. 
+. generate hgbgp=1 if hgb2<100
+(4,007 missing values generated)
+
+. replace hgbgp=2 if hgb2>=100 & hgb2!=.
+(4,007 real changes made)
+
+. tab hgbgp
+
+      hgbgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        367        8.39        8.39
+          2 |      4,007       91.61      100.00
+------------+-----------------------------------
+      Total |      4,374      100.00
+
+. 
+. * considering lymphocyte count=0 is impossible
+. replace lym2=. if lym2==0
+(3 real changes made, 3 to missing)
+
+. sum lym2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        lym2 |      4,371    2.339688    4.107169   .0619314      120.5
+
+. 
+. generate lymgp=1 if lym2<1.9
+(2,077 missing values generated)
+
+. replace lymgp=2 if lym2>=1.9 & lym2!=.
+(2,074 real changes made)
+
+. tab lymgp
+
+      lymgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      2,297       52.55       52.55
+          2 |      2,074       47.45      100.00
+------------+-----------------------------------
+      Total |      4,371      100.00
+
+. 
+. * A normal range for total globulins is 23 to 35 g/L
+. * I will consider 70 g/L as the maximum limit for globulin
+. 
+. replace glob2=. if glob2>70
+(15 real changes made, 15 to missing)
+
+. sum glob2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       glob2 |      4,359    37.67034    6.672832         17         70
+
+. 
+. generate glogp=1 if glob2<38
+(1,973 missing values generated)
+
+. replace glogp=2 if glob2>=38 & glob2!=.
+(1,958 real changes made)
+
+. tab glogp
+
+      glogp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      2,401       55.08       55.08
+          2 |      1,958       44.92      100.00
+------------+-----------------------------------
+      Total |      4,359      100.00
+
+. 
+. generate cagp=1 if cai2<1.35
+(186 missing values generated)
+
+. replace cagp=2 if cai2>=1.35 & cai2!=.
+(186 real changes made)
+
+. tab cagp
+
+       cagp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      4,188       95.75       95.75
+          2 |        186        4.25      100.00
+------------+-----------------------------------
+      Total |      4,374      100.00
+
+. 
+. generate angp=1 if agapt2<10
+(2,741 missing values generated)
+
+. replace angp=2 if agapt2>=10 & agapt2!=.
+(2,741 real changes made)
+
+. tab angp
+
+       angp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,633       37.33       37.33
+          2 |      2,741       62.67      100.00
+------------+-----------------------------------
+      Total |      4,374      100.00
+
+. 
+. * A normal range for eGFR is 80-120 (125ml/min/1.73m2)
+. * I will consider 250 ml/min/1.73m2 as the maximum limit for gfr2
+. 
+. replace gfr2=. if gfr2>250
+(14 real changes made, 14 to missing)
+
+. sum gfr2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        gfr2 |      4,354    75.73713    30.87278   3.018966    241.256
+
+. 
+. generate gfrgp=1 if gfr2<60
+(3,125 missing values generated)
+
+. replace gfrgp=2 if gfr2>=60 & gfr2!=.
+(3,105 real changes made)
+
+. tab gfrgp
+
+      gfrgp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,249       28.69       28.69
+          2 |      3,105       71.31      100.00
+------------+-----------------------------------
+      Total |      4,354      100.00
+
+. 
+. mdesc gender agegp hgbgp lymgp glogp cagp angp gfrgp
+
+    Variable    |     Missing          Total     Percent Missing
+----------------+-----------------------------------------------
+         gender |           5          4,374           0.11
+          agegp |           1          4,374           0.02
+          hgbgp |           0          4,374           0.00
+          lymgp |           3          4,374           0.07
+          glogp |          15          4,374           0.34
+           cagp |           0          4,374           0.00
+           angp |           0          4,374           0.00
+          gfrgp |          20          4,374           0.46
+----------------+-----------------------------------------------
+
+. * misstable sum gender agegp hgbgp lymgp glogp cagp angp gfrgp
+. 
+. label define age 1 "younger than 60" 2 "older than 60"
+
+. label value agegp age
+
+. 
+. label define hgb 1 "less than 100 g/L" 2 "more than 100 g/L" 
+
+. label value hgbgp hgb
+
+. 
+. label define lymph 1 "less than 1.9 x10^9/L" 2 "more than 1.9 x10^9/L"
+
+. label value lymgp lymph
+
+. 
+. label define globulin 1 "less than 38 g/L" 2 "more than 38 g/L"
+
+. label value glogp globulin
+
+. 
+. label define ical 1 "less than 1.35 mmol/L" 2 "more than 1.35 mmol/L"
+
+. label value cagp ical
+
+. 
+. label define angap 1 "less than 10 mmol/L" 2 "more than 10 mmol/L"
+
+. label value angp angap
+
+. 
+. label define gfrgp 1 "less than 60 mL/min/1.73 m2" 2 "more than 60 mL/min/1.73 m2"
+
+. label value gfrgp gfrgp
+
+. 
+end of do-file
+
+. do "/var/folders/s9/1_58_r7d14q02tq0nct3crv00000gn/T//SD04246.000000"
+
+. ** generate score
+. gen score_final=[-5.04]+ [1.15]*2.glogp+ [0.92]*2.agegp+ [0.75]*1.lymgp+ [0.67]*1.gfrgp+ [0.39]*2.gender+ [0.39]*2.hgbgp
+(38 missing values generated)
+
+. 
+end of do-file
+
+. qui : logit epg score_final
+
+. * calibration
+
+. * hosmer lemeshow
+
+. estat gof, group(6)
+
+Logistic model for epg, goodness-of-fit test
+
+  (Table collapsed on quantiles of estimated probabilities)
+
+       number of observations =      4336
+             number of groups =         6
+      Hosmer-Lemeshow chi2(4) =         4.08
+                  Prob > chi2 =         0.3950
+
+. lroc
+
+Logistic model for epg
+
+number of observations =     4336
+area under ROC curve   =   0.7898
+
+. graph export "/Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Graph_val.svg", as(svg) name("Graph")
+(file /Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Graph_val.svg written in SVG format)
+
+. ****** Compare C statistics between derivative and validated model
+
+. 
+. ** make the validated data set as data 2
+
+. ** save and clear
+
+. gen data=2
+
+. save "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for validation phase.dta", repla
+> ce
+file /Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for validation phase.dta saved
+
+. clear
+
+. use "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta"
+
+. ** only keep the important ones we are going to use
+
+. ** make it data 1
+
+. ** save the dataset
+
+. keep id epg score_final
+
+. gen data=1
+
+. save "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta", replace
+file /Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta saved
+
+. ** join data 2 ( internal validated dataset into the derivative data ) ( append )
+
+. append using "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for validation phase.dta
+> "
+(label gfrgp already defined)
+(label angap already defined)
+(label ical already defined)
+(label globulin already defined)
+(label lymph already defined)
+(label hgb already defined)
+(label age already defined)
+(label gender already defined)
+
+. tab data
+
+       data |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |     10,000       69.57       69.57
+          2 |      4,374       30.43      100.00
+------------+-----------------------------------
+      Total |     14,374      100.00
+
+. roccomp epg score_final, by (data)
+
+                              ROC                    -Asymptotic Normal--
+data               Obs       Area     Std. Err.      [95% Conf. Interval]
+-------------------------------------------------------------------------
+1                 9908     0.7680       0.0085        0.75141     0.78466
+2                 4336     0.7898       0.0123        0.76579     0.81386
+-------------------------------------------------------------------------
+Ho: area(1) = area(2)
+    chi2(1) =     2.14       Prob>chi2 =   0.1439
+
+. log close
+      name:  <unnamed>
+       log:  /Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Model_u_m_iv.log
+  log type:  text
+ closed on:   1 Feb 2020, 14:06:33
+-----------------------------------------------------------------------------------------------------------------------------

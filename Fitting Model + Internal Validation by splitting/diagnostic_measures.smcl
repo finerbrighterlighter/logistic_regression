@@ -1,0 +1,332 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/hteza/Desktop/Class/RACE626/Assignment 1/disgmea.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 3 Feb 2020, 12:32:37
+
+{com}. use "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta"
+
+. do "/Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/data proccessing.do"
+{txt}
+{com}. ** data preprocessing
+. 
+. use "/Users/hteza/Desktop/Class/RACE626/Assignment 1/Upload assignment I/Assignment I epg for derive phase.dta"
+{txt}
+{com}. 
+. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}     10,000     59.5009    19.12893          0        106
+{txt}
+{com}. sum hgb2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}hgb2 {c |}{res}     10,000    128.8984    19.03016   53.90819        223
+{txt}
+{com}. sum lym2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}lym2 {c |}{res}     10,000    2.403219    7.955171          0      588.3
+{txt}
+{com}. sum glob2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}glob2 {c |}{res}     10,000     37.9204    7.231438         13        114
+{txt}
+{com}. sum cai2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}cai2 {c |}{res}     10,000    1.211957    .0838514        .52       2.29
+{txt}
+{com}. sum agapt2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 6}agapt2 {c |}{res}     10,000    10.14441    2.700755          0         28
+{txt}
+{com}. sum gfr2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}gfr2 {c |}{res}      9,990    76.74878    39.66912   3.247472   1254.995
+{txt}
+{com}. encode sex, gen (gender)
+{txt}
+{com}. misstable sum
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+          gfr2 {c |}{res}        10{txt}{space 10}{res}     9,990{txt}  {c |}   >500   3.247472    1254.995
+       _Isex_2 {c |}{res}        10{txt}{space 10}{res}     9,990{txt}  {c |}      2          0           1
+        gender {c |}{res}        10{txt}{space 10}{res}     9,990{txt}  {c |}      2          1           2
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. 
+. * considering age=0 is impossible
+. replace age=. if age==0
+{txt}(2 real changes made, 2 to missing)
+
+{com}. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}      9,998     59.5128    19.11231          1        106
+{txt}
+{com}. 
+. * grouping data according to Aj
+. generate agegp=1 if age<60
+{txt}(5,362 missing values generated)
+
+{com}. replace agegp=2 if age>=60 & age!=.
+{txt}(5,360 real changes made)
+
+{com}. tab agegp
+
+      {txt}agegp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      4,638       46.39       46.39
+{txt}          2 {c |}{res}      5,360       53.61      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      9,998      100.00
+{txt}
+{com}. 
+. * _Isex_2 is considered encoded sex
+. 
+. generate hgbgp=1 if hgb2<100
+{txt}(9,178 missing values generated)
+
+{com}. replace hgbgp=2 if hgb2>=100 & hgb2!=.
+{txt}(9,178 real changes made)
+
+{com}. tab hgbgp
+
+      {txt}hgbgp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}        822        8.22        8.22
+{txt}          2 {c |}{res}      9,178       91.78      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     10,000      100.00
+{txt}
+{com}. 
+. * considering lymphocyte count=0 is impossible
+. replace lym2=. if lym2==0
+{txt}(4 real changes made, 4 to missing)
+
+{com}. sum lym2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}lym2 {c |}{res}      9,996    2.404181    7.956617         .1      588.3
+{txt}
+{com}. 
+. generate lymgp=1 if lym2<1.9
+{txt}(4,574 missing values generated)
+
+{com}. replace lymgp=2 if lym2>=1.9 & lym2!=.
+{txt}(4,570 real changes made)
+
+{com}. tab lymgp
+
+      {txt}lymgp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      5,426       54.28       54.28
+{txt}          2 {c |}{res}      4,570       45.72      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      9,996      100.00
+{txt}
+{com}. 
+. * A normal range for total globulins is 23 to 35 g/L
+. * I will consider 70 g/L as the maximum limit for globulin
+. 
+. replace glob2=. if glob2>70
+{txt}(44 real changes made, 44 to missing)
+
+{com}. sum glob2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 7}glob2 {c |}{res}      9,956    37.72268    6.576134         13         70
+{txt}
+{com}. 
+. generate glogp=1 if glob2<38
+{txt}(4,582 missing values generated)
+
+{com}. replace glogp=2 if glob2>=38 & glob2!=.
+{txt}(4,538 real changes made)
+
+{com}. tab glogp
+
+      {txt}glogp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      5,418       54.42       54.42
+{txt}          2 {c |}{res}      4,538       45.58      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      9,956      100.00
+{txt}
+{com}. 
+. generate cagp=1 if cai2<1.35
+{txt}(440 missing values generated)
+
+{com}. replace cagp=2 if cai2>=1.35 & cai2!=.
+{txt}(440 real changes made)
+
+{com}. tab cagp
+
+       {txt}cagp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      9,560       95.60       95.60
+{txt}          2 {c |}{res}        440        4.40      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     10,000      100.00
+{txt}
+{com}. 
+. generate angp=1 if agapt2<10
+{txt}(6,198 missing values generated)
+
+{com}. replace angp=2 if agapt2>=10 & agapt2!=.
+{txt}(6,198 real changes made)
+
+{com}. tab angp
+
+       {txt}angp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      3,802       38.02       38.02
+{txt}          2 {c |}{res}      6,198       61.98      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     10,000      100.00
+{txt}
+{com}. 
+. * A normal range for eGFR is 80-120 (125ml/min/1.73m2)
+. * I will consider 250 ml/min/1.73m2 as the maximum limit for gfr2
+. 
+. replace gfr2=. if gfr2>250
+{txt}(33 real changes made, 33 to missing)
+
+{com}. sum gfr2
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}gfr2 {c |}{res}      9,957    75.47438    30.30081   3.247472   249.8909
+{txt}
+{com}. 
+. 
+. generate gfrgp=1 if gfr2<60
+{txt}(7,049 missing values generated)
+
+{com}. replace gfrgp=2 if gfr2>=60 & gfr2!=.
+{txt}(7,006 real changes made)
+
+{com}. tab gfrgp
+
+      {txt}gfrgp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      2,951       29.64       29.64
+{txt}          2 {c |}{res}      7,006       70.36      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      9,957      100.00
+{txt}
+{com}. 
+. mdesc gender agegp hgbgp lymgp glogp cagp angp gfrgp
+
+{txt}    Variable{col 17}{c |}     Missing          Total     Percent Missing
+{hline 16}{c +}{hline 47}
+         gender{col 17}{c |} {res}         10         10,000           0.10
+          {txt}agegp{col 17}{c |} {res}          2         10,000           0.02
+          {txt}hgbgp{col 17}{c |} {res}          0         10,000           0.00
+          {txt}lymgp{col 17}{c |} {res}          4         10,000           0.04
+          {txt}glogp{col 17}{c |} {res}         44         10,000           0.44
+           {txt}cagp{col 17}{c |} {res}          0         10,000           0.00
+           {txt}angp{col 17}{c |} {res}          0         10,000           0.00
+          {txt}gfrgp{col 17}{c |} {res}         43         10,000           0.43
+{txt}{hline 16}{c +}{hline 47}
+
+{com}. * misstable sum gender agegp hgbgp lymgp glogp cagp angp gfrgp
+. 
+. label define age 1 "younger than 60" 2 "older than 60"
+{txt}
+{com}. label value agegp age
+{txt}
+{com}. 
+. label define hgb 1 "less than 100 g/L" 2 "more than 100 g/L" 
+{txt}
+{com}. label value hgbgp hgb
+{txt}
+{com}. 
+. label define lymph 1 "less than 1.9 x10^9/L" 2 "more than 1.9 x10^9/L"
+{txt}
+{com}. label value lymgp lymph
+{txt}
+{com}. 
+. label define globulin 1 "less than 38 g/L" 2 "more than 38 g/L"
+{txt}
+{com}. label value glogp globulin
+{txt}
+{com}. 
+. label define ical 1 "less than 1.35 mmol/L" 2 "more than 1.35 mmol/L"
+{txt}
+{com}. label value cagp ical
+{txt}
+{com}. 
+. label define angap 1 "less than 10 mmol/L" 2 "more than 10 mmol/L"
+{txt}
+{com}. label value angp angap
+{txt}
+{com}. 
+. label define gfrgp 1 "less than 60 mL/min/1.73 m2" 2 "more than 60 mL/min/1.73 m2"
+{txt}
+{com}. label value gfrgp gfrgp
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. qui : logit epg i.glogp i.agegp ib(2).lymgp ib(2).gfrgp i.gender i.hgbgp
+
+. predict pattern, number
+{txt}(92 missing values generated)
+
+{com}. predict probsa, pr
+{txt}(92 missing values generated)
+
+{com}. predict chires, dx2
+{txt}(92 missing values generated)
+
+{com}. twoway (scatter chires probsa , sort mlabel(pattern) mfcolor(yellow))
+{res}
+{com}. graph export "/Users/hteza/Desktop/Class/RACE626/Assignment 1/chi2residual.svg", as(svg) name("Graph")
+{txt}(file /Users/hteza/Desktop/Class/RACE626/Assignment 1/chi2residual.svg written in SVG format)
+
+{com}. predict detres2,ddeviance
+{txt}(92 missing values generated)
+
+{com}. twoway (scatter detres2 probsa, sort mcolor(lime) msymbol(smcircle_hollow) mlabel(pattern))
+{res}
+{com}. graph save "Graph" "/Users/hteza/Desktop/Class/RACE626/Assignment 1/deltaresidual.gph"
+{res}{txt}(file /Users/hteza/Desktop/Class/RACE626/Assignment 1/deltaresidual.gph saved)
+
+{com}. graph export "/Users/hteza/Desktop/Class/RACE626/Assignment 1/deltaresidual.svg", as(svg) name("Graph")
+{txt}(file /Users/hteza/Desktop/Class/RACE626/Assignment 1/deltaresidual.svg written in SVG format)
+
+{com}. predict deltac,db
+{txt}(92 missing values generated)
+
+{com}. twoway (scatter deltac probsa, sort mcolor(lime) msymbol(smcircle_hollow) mlabel(pattern))
+{res}
+{com}. graph export "/Users/hteza/Desktop/Class/RACE626/Assignment 1/deltacoef.svg", as(svg) name("Graph")
+{txt}(file /Users/hteza/Desktop/Class/RACE626/Assignment 1/deltacoef.svg written in SVG format)
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/hteza/Desktop/Class/RACE626/Assignment 1/disgmea.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 3 Feb 2020, 12:38:07
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

@@ -1,0 +1,40 @@
+-----------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Bootstrapping.log
+  log type:  text
+ opened on:   1 Feb 2020, 13:37:07
+
+. use "/Users/hteza/Desktop/Class/RACE626/bootstrapping/result_boot.dta"
+
+. gen corigin=0.7680
+
+. gen dorigion=0.5360
+
+. gen cop= corigin - cboot
+
+. gen dop = dorigion - dboot
+
+. ci means cop dop
+
+    Variable |        Obs        Mean    Std. Err.       [95% Conf. Interval]
+-------------+---------------------------------------------------------------
+         cop |        200   -.0344541    .0035464       -.0414474   -.0274609
+         dop |        200   -.0689083    .0070927       -.0828949   -.0549217
+
+. gen dcor = dorigion-dop
+
+. ci means dcor
+
+    Variable |        Obs        Mean    Std. Err.       [95% Conf. Interval]
+-------------+---------------------------------------------------------------
+        dcor |        200    .6049083    .0070927        .5909217    .6188949
+
+. save "/Users/hteza/Desktop/Class/RACE626/bootstrapping/result_boot.dta", replace
+file /Users/hteza/Desktop/Class/RACE626/bootstrapping/result_boot.dta saved
+
+. log close
+      name:  <unnamed>
+       log:  /Users/hteza/Desktop/Class/RACE626/Assignment 1/ass file/Bootstrapping.log
+  log type:  text
+ closed on:   1 Feb 2020, 13:49:30
+-----------------------------------------------------------------------------------------------------------------------------
